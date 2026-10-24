@@ -26,6 +26,9 @@ ARG TARGETARCH
 ARG GOPROXY=https://goproxy.cn,https://proxy.golang.org,direct
 WORKDIR /src
 COPY go.mod go.sum ./
+# go.mod 用 replace 指向本地 ./norma，go mod download 时必须已有 norma/go.mod，
+# 否则报 open /src/norma/go.mod: no such file or directory（CI docker job 曾因此失败）。
+COPY norma/ ./norma/
 RUN go mod download
 COPY . .
 # 前端静态产物从 web 阶段拷入（.dockerignore 已排除宿主 dist，不会冲突）
