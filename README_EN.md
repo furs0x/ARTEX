@@ -1,7 +1,7 @@
 [中文](README.md) | English
 
 > ⚠️ **Unofficial community archive**: The original author Autumn-27's repository has been deleted. This repository is a backup based on ARTEX v0.3.15, preserving the complete commit history, and is not affiliated with the original author. It is open-sourced under AGPL-3.0 (see the License section at the end).
-> **Maintenance status**: Archive-first, with limited maintenance. One-click updates from the page depend on Releases; this repository currently provides no release packages — please update by building from source.
+> **Maintenance status**: Archive-first, with limited maintenance. This repository now provides Release v0.3.3 (prebuilt packages for 5 platforms + SHA256SUMS) and Docker images `fuxrst3/artex:latest` / `v0.3.3`. Note: one-click updates from the page are currently unavailable because the update source is hardcoded to the deleted original repository — please update via Methods 2, 3, or 4 below.
 > **Usage restrictions**: Personal study, code research, and verification in a local isolated environment only. Actual testing against any online system is prohibited. See the "License & Disclaimer" section at the end for details.
 
 <div align="center">
@@ -13,7 +13,7 @@ AI autonomous penetration testing system (Go backend + Next.js frontend)
 
 🌐 **Online demo**: The original demo domain is no longer available, so no online demo is provided for now. See the screenshots below for the interface.
 
-📦 **This repository is a community archive backup of ARTEX v0.3.15, preserving the complete commit history. The original Docker image source `autumn27/artex` is no longer available; this repository provides no third-party prebuilt images — please build locally from pure source with `docker compose build`.**
+📦 **This repository is a community archive backup of ARTEX v0.3.15, preserving the complete commit history. The original Docker image source `autumn27/artex` is no longer available; this repository provides prebuilt images `fuxrst3/artex:v0.3.3` (and `latest`), or you can build locally from pure source with `docker compose build`.**
 
 </div>
 
@@ -99,8 +99,8 @@ docker compose up -d          # 本地构建镜像 + postgres
 # → http://localhost:8787
 ```
 
-> The original image source `autumn27/artex` has been removed from Docker Hub. This repository provides no third-party prebuilt images — please build locally with `docker compose build`.
-> When the image source is unavailable (or you want to modify the code yourself), just build locally from pure source: `docker compose build && docker compose up -d`.
+> The original image source `autumn27/artex` has been removed from Docker Hub. This repository provides prebuilt images — pull `docker pull fuxrst3/artex:v0.3.3` (or `latest`) — or build locally with `docker compose build`.
+> If you want to modify the code yourself, just build locally from pure source: `docker compose build && docker compose up -d`.
 > The Dockerfile uses a multi-stage build (frontend static export → Go static compilation → runtime image) and defaults to China-friendly dependency mirrors; you can override them with `--build-arg GOPROXY=... / --build-arg NPM_REGISTRY=...`.
 
 The image includes common tools (ripgrep/curl/vim/npm/nmap…); `./skills` and `./data` are persisted via bind mounts.
@@ -112,7 +112,7 @@ A legacy SSE service typically uses `GET /sse` to establish an event stream, the
 
 ### Method 3: Download prebuilt binaries (Releases)
 
-The original repository's Releases became invalid when the original repository was deleted, and this repository hosts no binaries. Please build from source using Method 2 or Method 4; the build artifacts are `artex` + `start.sh` (`start.bat` on Windows) + `skills/` + `config.example.json`:
+The original repository's Releases became invalid when the original repository was deleted. This repository's Release v0.3.3 provides prebuilt packages for 5 platforms: [v0.3.3 Release](https://github.com/furs0x/ARTEX/releases/tag/v0.3.3) (Linux amd64/arm64, macOS amd64/arm64, Windows amd64, with SHA256SUMS). Download the zip for your platform and extract it; it contains `artex`, the launcher script (`start.sh`, `start.bat` on Windows), `skills/`, and `config.example.json`:
 
 ```bash
 cp config.example.json config.json   # 填好 database 连接
@@ -160,6 +160,8 @@ ARTEX_TARGETS=linux/amd64,windows/amd64 ./build.sh --release
 
 On the **System Settings** page (sidebar "System Settings" → `/system/settings`), the **Version & Updates** card lets you check for and install new versions directly, without logging into the server.
 
+> Note: one-click updates from the page are currently unavailable — the update source is hardcoded in code to the deleted original repository (`Repo` constant in `selfupdate/github.go`) and cannot find new versions. Please update via Methods 2, 3, or 4.
+
 After clicking "Update": download the release package for the current platform → compare the release's `SHA256SUMS` → smoke-test the new binary with `-h` → stage it as `artex.new` → the program exits and is restarted by `start.sh` / `start.bat` to complete the swap. The page automatically waits for the new version to come online, then refreshes.
 
 - **A failed update leaves no broken program**: if verification or the smoke test fails, the staged file is discarded and the current version keeps running; if the swapped-in new version fails to start 3 times in a row, it automatically rolls back to `artex.old` (the failed one is kept as `artex.failed` for troubleshooting).
@@ -194,10 +196,10 @@ docker image prune -f          # 清理旧镜像（可选）
 
 ### Method 4: Prebuilt binaries (Releases)
 
-The original repository's Releases are no longer valid. For updates, use Method 1 (one-click update from the page), Method 2 (update script), or Method 5 (compile from source) — do not download from Releases anymore:
+The original repository's Releases are no longer valid — do not download from the original repository. When this repository publishes a new Release, update via Method 2 (update script), Method 3 (Docker Compose), or Method 4 (download the new prebuilt package), or Method 5 (compile from source):
 
 ```bash
-# 从源码重新构建后，重启 ./start.sh 即可
+# After extracting the new prebuilt package, restart with ./start.sh
 ./start.sh
 ```
 

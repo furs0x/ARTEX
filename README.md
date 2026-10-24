@@ -1,7 +1,7 @@
 [English](README_EN.md) | 中文
 
 > ⚠️ **非官方社区存档**：原作者 Autumn-27 的仓库已删除。本仓库基于 ARTEX v0.3.15 备份，保留完整提交历史，与原作者无关；采用 AGPL-3.0 开源（见文末许可）。
-> **维护状态**：存档为主、有限维护。页面一键更新依赖 Releases，本仓库暂不提供发布包，请用源码构建更新。
+> **维护状态**：存档为主、有限维护。本仓库已提供 Release v0.3.3（5 平台预编译包 + SHA256SUMS）及 Docker 镜像 `fuxrst3/artex:latest` / `v0.3.3`；页面一键更新因更新源写死为已删除的原仓库而暂不可用，更新请用方式二、三、四。
 > **使用限制**：仅限个人学习、代码研究与本地隔离环境验证，禁止对任何线上系统发起实际测试，详见文末「许可与免责声明」。
 
 <div align="center">
@@ -13,7 +13,7 @@ AI 自主渗透测试系统（Go 后端 + Next.js 前端）
 
 🌐 **在线 Demo**：原演示域名已失效，暂不提供在线演示，界面见下方截图。
 
-📦 **该仓库为 ARTEX v0.3.15 的社区存档备份，保留完整提交历史。原 Docker 镜像源 `autumn27/artex` 已失效；本仓库不提供第三方预编译镜像，请用 `docker compose build` 从纯源码本地构建。**
+📦 **该仓库为 ARTEX v0.3.15 的社区存档备份，保留完整提交历史。原 Docker 镜像源 `autumn27/artex` 已失效；本仓库提供预编译镜像 `fuxrst3/artex:v0.3.3`（另有 `latest`），也可 `docker compose build` 从纯源码本地构建。**
 
 </div>
 
@@ -99,8 +99,8 @@ docker compose up -d          # 本地构建镜像 + postgres
 # → http://localhost:8787
 ```
 
-> 原镜像源 `autumn27/artex` 已从 Docker Hub 删除，本仓库不提供第三方预编译镜像，请用 `docker compose build` 本地构建。
-> 镜像源不可用（或想自行改代码）时，本地从纯源码构建即可：`docker compose build && docker compose up -d`。
+> 原镜像源 `autumn27/artex` 已从 Docker Hub 删除。本仓库提供预编译镜像，可直接 `docker pull fuxrst3/artex:v0.3.3`（或 `latest`），也可 `docker compose build` 本地构建。
+> 想自行改代码时，本地从纯源码构建即可：`docker compose build && docker compose up -d`。
 > Dockerfile 为多阶段构建（前端静态导出 → Go 静态编译 → 运行镜像），默认走国内友好依赖源，可加 `--build-arg GOPROXY=... / --build-arg NPM_REGISTRY=...` 覆盖。
 
 镜像已含常用工具（ripgrep/curl/vim/npm/nmap…）；`./skills` 与 `./data` 以绑定挂载持久化。
@@ -112,7 +112,7 @@ docker compose up -d          # 本地构建镜像 + postgres
 
 ### 方式三：下载预编译二进制（Releases）
 
-原仓库 Releases 已随原仓库删除而失效，本仓库不托管二进制，请用方式二或方式四从源码构建，构建产物为 `artex` + `start.sh`（Windows 为 `start.bat`）+ `skills/` + `config.example.json`：
+原仓库 Releases 已随原仓库删除而失效；本仓库 Release v0.3.3 提供 5 平台预编译包：[v0.3.3 Release](https://github.com/furs0x/ARTEX/releases/tag/v0.3.3)（Linux amd64/arm64、macOS amd64/arm64、Windows amd64，附 SHA256SUMS）。下载对应平台的 zip 解压，内含 `artex` + `start.sh`（Windows 为 `start.bat`）+ `skills/` + `config.example.json`：
 
 ```bash
 cp config.example.json config.json   # 填好 database 连接
@@ -160,6 +160,8 @@ ARTEX_TARGETS=linux/amd64,windows/amd64 ./build.sh --release
 
 在 **系统配置** 页（侧边栏「系统配置」→ `/system/settings`）的**版本与更新**卡片里，可以直接检查并安装新版本，无需登录服务器。
 
+> 注意：页面一键更新的更新源在代码里写死为已删除的原仓库（`selfupdate/github.go` 的 `Repo` 常量），目前查不到新版，暂时不可用；请用方式二、三、四更新。
+
 点「更新」后：下载当前平台的发布包 → 比对 Release 的 `SHA256SUMS` → 用 `-h` 冒烟测试新二进制 → 暂存为 `artex.new` → 程序退出，由 `start.sh` / `start.bat` 重新拉起并完成换装。页面会自动等到新版本上线后刷新。
 
 - **失败不会留下坏程序**：校验或冒烟不通过就丢弃暂存件、继续跑当前版本；换装后的新版若连续 3 次启动失败，会自动回滚到 `artex.old`（失败的那个留作 `artex.failed` 供排查）。
@@ -194,10 +196,10 @@ docker image prune -f          # 清理旧镜像（可选）
 
 ### 方式四：预编译二进制（Releases）
 
-原仓库 Releases 已失效，更新请用方式一（页面一键更新）、方式二（更新脚本）或方式五（从源码编译），不要再从 Releases 下载：
+原仓库 Releases 已失效，不要再从原仓库下载；本仓库有新版 Release 时，更新可用方式二（更新脚本）、方式三（Docker Compose）或方式四（下载新版预编译包），或方式五（从源码编译）：
 
 ```bash
-# 从源码重新构建后，重启 ./start.sh 即可
+# 下载新版预编译包解压后，重启 ./start.sh 即可
 ./start.sh
 ```
 
