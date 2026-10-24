@@ -1,3 +1,7 @@
+> ⚠️ **非官方社区存档**：原作者 Autumn-27 的仓库已删除。本仓库基于 ARTEX v0.3.15 备份，保留完整提交历史，与原作者无关；采用 AGPL-3.0 开源（见文末许可）。
+> **维护状态**：存档为主、有限维护。页面一键更新依赖 Releases，本仓库暂不提供发布包，请用源码构建更新。
+> **使用限制**：仅限个人学习、代码研究与本地隔离环境验证，禁止对任何线上系统发起实际测试，详见文末「许可与免责声明」。
+
 <div align="center">
 
 # ARTEX
@@ -5,9 +9,9 @@
 AI 自主渗透测试系统（Go 后端 + Next.js 前端）
 
 
-🌐 **在线 Demo（模拟数据）**： [https://artex-demo.mhtsec.com](https://artex-demo.mhtsec.com)
+🌐 **在线 Demo**：原演示域名已失效，暂不提供在线演示，界面见下方截图。
 
-📦 **该仓库为ARTEX最后一个版本纯源码备份。原 Docker 镜像源 `autumn27/artex` 已失效，现由本仓库自维护镜像 `mianhuatang11/artex`（Docker Hub）；拉取失败时可 `docker compose build` 从纯源码本地构建，无任何外部预编译依赖。**
+📦 **该仓库为 ARTEX v0.3.15 的社区存档备份，保留完整提交历史。原 Docker 镜像源 `autumn27/artex` 已失效；本仓库不提供第三方预编译镜像，请用 `docker compose build` 从纯源码本地构建。**
 
 </div>
 
@@ -15,7 +19,7 @@ AI 自主渗透测试系统（Go 后端 + Next.js 前端）
 
 ## 截图预览
 
-> 完整交互见[在线 Demo](https://artex-demo.mhtsec.com)（纯前端 + Mock 数据，无需后端）。
+> 下方为界面截图预览（原在线 Demo 已失效）。
 
 | 仪表盘（总览 / Token 消耗 / 活动流） | 任务列表 |
 | :---: | :---: |
@@ -56,7 +60,7 @@ AI 自主渗透测试系统（Go 后端 + Next.js 前端）
 
 ## 资产同步（ScopeSentry）
 
-支持从 [ScopeSentry](https://github.com/Autumn-27/ScopeSentry) 直接同步资产数据，免去重复收集：
+支持从 ScopeSentry（原作者仓库已删除，功能保留）直接同步资产数据，免去重复收集：
 
 - 在「**资产同步**」页填 ScopeSentry 的地址与 API Key，接入数据源；
 - 按**项目**或**任务**维度选择要同步的目标与资产类型（域名 / 子域 / IP / 端口 / 站点 / 端点…）；
@@ -71,7 +75,7 @@ AI 自主渗透测试系统（Go 后端 + Next.js 前端）
 ### 方式一：一键安装脚本（推荐）
 
 ```bash
-git clone https://github.com/mhtsec/ARTEX.git
+git clone https://github.com/depppoiq/ARTEX.git
 cd ARTEX
 ./install.sh
 ```
@@ -86,14 +90,14 @@ cd ARTEX
 ### 方式二：Docker Compose（手动）
 
 ```bash
-git clone https://github.com/mhtsec/ARTEX.git
+git clone https://github.com/depppoiq/ARTEX.git
 cd ARTEX
 cp .env.example .env          # 填 POSTGRES_PASSWORD、可选 ANTHROPIC_API_KEY
-docker compose up -d          # 拉取 mianhuatang11/artex 镜像 + postgres
+docker compose up -d          # 本地构建镜像 + postgres
 # → http://localhost:8787
 ```
 
-> 原镜像源 `autumn27/artex` 已从 Docker Hub 删除，镜像现由本仓库自维护为 **`mianhuatang11/artex`**。
+> 原镜像源 `autumn27/artex` 已从 Docker Hub 删除，本仓库不提供第三方预编译镜像，请用 `docker compose build` 本地构建。
 > 镜像源不可用（或想自行改代码）时，本地从纯源码构建即可：`docker compose build && docker compose up -d`。
 > Dockerfile 为多阶段构建（前端静态导出 → Go 静态编译 → 运行镜像），默认走国内友好依赖源，可加 `--build-arg GOPROXY=... / --build-arg NPM_REGISTRY=...` 覆盖。
 
@@ -106,7 +110,7 @@ docker compose up -d          # 拉取 mianhuatang11/artex 镜像 + postgres
 
 ### 方式三：下载预编译二进制（Releases）
 
-到原仓库 [Releases](https://github.com/Autumn-27/ARTEX/releases) 下载对应平台的 zip（**本备份仓库不托管二进制**，若原 Releases 也失效请用方式二或方式四）：解压后得到 `artex` + `start.sh`（Windows 为 `start.bat`）+ `skills/` + `config.example.json`：
+原仓库 Releases 已随原仓库删除而失效，本仓库不托管二进制，请用方式二或方式四从源码构建，构建产物为 `artex` + `start.sh`（Windows 为 `start.bat`）+ `skills/` + `config.example.json`：
 
 ```bash
 cp config.example.json config.json   # 填好 database 连接
@@ -188,10 +192,10 @@ docker image prune -f          # 清理旧镜像（可选）
 
 ### 方式四：预编译二进制（Releases）
 
-到 [Releases](https://github.com/Autumn-27/ARTEX/releases) 下载新版本 zip，停掉旧进程后覆盖 `artex` 与 `skills/`（保留你的 `config.json` 与 `data/`），重启即可：
+原仓库 Releases 已失效，更新请用方式一（页面一键更新）、方式二（更新脚本）或方式五（从源码编译），不要再从 Releases 下载：
 
 ```bash
-cp -r <解压目录>/skills ./ && cp <解压目录>/artex ./
+# 从源码重新构建后，重启 ./start.sh 即可
 ./start.sh
 ```
 
@@ -283,17 +287,12 @@ server {
 - 前端：`cd web && npm run dev`（`/api` 反代到后端，带热更新）
 - 测试：`go test ./...`
 - Mock 预览（无后端）：`cd web && NEXT_PUBLIC_MOCK=1 npm run dev`
-- 在线 Demo 重新部署（Cloudflare Pages，静态导出 + Mock 数据）：
-  ```bash
-  cd web && NEXT_PUBLIC_MOCK=1 npm run build:static
-  CLOUDFLARE_API_TOKEN=<token> npx wrangler pages deploy out --project-name=artex-demo --branch=main
-  ```
 
 ---
 
 ## 系统技术架构
 
-ARTEX 是一套 **LLM 多 agent 驱动的自主渗透系统**：Go 单体后端（内嵌 Next.js 前端）+ PostgreSQL，agent 能力由 [`norma`](https://github.com/Autumn-27/norma) SDK 提供（`agentcore` / `tool` / `permission` / `harness` / `memory` / `transcript`）。核心是**双图架构**，以及围绕它的两条自主性机制：**worker 间过程级信息交换**与 **planner 多轮共享 todolist 稳定攻击链路**。
+ARTEX 是一套 **LLM 多 agent 驱动的自主渗透系统**：Go 单体后端（内嵌 Next.js 前端）+ PostgreSQL，agent 能力由 `norma` SDK 提供（已随仓库内 vendor，不依赖原仓库）（`agentcore` / `tool` / `permission` / `harness` / `memory` / `transcript`）。核心是**双图架构**，以及围绕它的两条自主性机制：**worker 间过程级信息交换**与 **planner 多轮共享 todolist 稳定攻击链路**。
 
 ### 总体分层
 
@@ -461,15 +460,9 @@ flowchart TB
 
 ---
 
-## 交流群
+## 交流
 
-扫码关注微信公众号 **SecSentry**，在公众号后台私信即可入群交流。
-
-<div align="center">
-
-<img src="screenshots/wx.png" alt="微信公众号 SecSentry" width="480" />
-
-</div>
+有问题请直接提 Issue。
 
 ---
 ## 参考
